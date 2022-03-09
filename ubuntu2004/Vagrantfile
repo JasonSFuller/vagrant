@@ -1,0 +1,30 @@
+### Install these plugins:
+# vagrant plugin install vagrant-reload
+# vagrant plugin install vagrant-scp
+# vagrant plugin install vagrant-sshfs
+# vagrant plugin install vagrant-vbguest
+
+Vagrant.configure("2") do |config|
+  if Vagrant.has_plugin? "vagrant-vbguest"
+    config.vbguest.auto_update = false
+    config.vbguest.no_remote   = true
+  end
+  config.vm.box = "ubuntu/focal64"
+  config.vm.box_version = "20220308.0.0"
+  #config.vbguest.installer_options = { allow_kernel_upgrade: true } # for vagrant-vbguest plugin
+  config.vm.define "ubuntu2004" do |box|
+    box.vm.host_name = "ubuntu2004"
+    #box.vm.network "private_network", type: "dhcp"
+    box.vm.network "private_network", ip: "192.168.56.20"
+    #box.vm.network "forwarded_port", guest: 80,  host: 8080
+    #box.vm.network "forwarded_port", guest: 443, host: 8443
+    box.vm.synced_folder ".", "/vagrant", type: "sshfs" # sshfs for 2-way sync
+    box.vm.provider :virtualbox do |v|
+      v.memory = 2048
+      v.cpus = 2
+    end
+    box.vm.provision "shell", privileged: true, inline: <<~'SHELL'
+      echo 'TEST MESSAGE:  Yay!  It worked!'
+    SHELL
+  end
+end

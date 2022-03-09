@@ -1,0 +1,35 @@
+Vagrant.require_version ">= 2.1.0" # minimum required for triggers
+
+user = ENV['REDHAT_SUBMGR_USER']
+pass = ENV['REDHAT_SUBMGR_PASS']
+if !user
+  puts 'ERROR: env var REDHAT_SUBMGR_USER missing'
+  abort
+end
+if !pass
+  puts 'ERROR: env var REDHAT_SUBMGR_PASS missing'
+  abort
+end
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "generic/rhel8"
+  #config.vm.box_version = "3.5.2"
+
+  config.vm.define :rhel8 do |box|
+    box.vm.host_name = "rhel8"
+    #box.vm.network "private_network", type: "dhcp"
+    box.vm.network "private_network", ip: "192.168.56.10"
+    #box.vm.network "forwarded_port", guest: 80,  host: 8080
+    #box.vm.network "forwarded_port", guest: 443, host: 8443
+    box.vm.provider :virtualbox do |v|
+      v.memory = 2048
+      v.cpus = 2
+    end
+    box.vm.provision "shell", privileged: true, inline: <<~'SHELL'
+      echo 'TEST MESSAGE:  Yay!  It worked!'
+    SHELL
+  end
+
+end
+

@@ -1,0 +1,20 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ansible/tower"
+  config.vm.box_version = "3.8.5"
+  config.vm.define :tower do |box|
+    box.vm.host_name = "ansible-tower"
+    box.vm.network "forwarded_port", guest: 443, host: 8443
+    # NOTE: You'll need `vagrant plugin install vagrant-sshfs` for this to work.
+    box.vm.synced_folder ".", "/vagrant", type: "sshfs" # for 2-way sync
+    box.vm.provider :virtualbox do |vb|
+      vb.memory = 4096
+      vb.cpus = 2
+    end
+    #box.vm.provision "shell", privileged: true, inline: <<~'SHELL'
+    #  echo 'TEST MESSAGE:  Yay!  It worked!'
+    #SHELL
+  end
+end
