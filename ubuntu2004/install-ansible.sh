@@ -7,7 +7,7 @@
 # However, that necessarily means that they lag behind the rest of open-source
 # projects.  Ansible has progressed quickly in the past few months (as of Mar
 # 2022) with the introduction of Ansible 5.x and Red Hat's new Ansible
-# Automation Platform spuring these changes along--not to mention the speed at
+# Automation Platform spurring these changes along--not to mention the speed at
 # which Ansible Galaxy modules are produced/updated.  Depending on the maturity
 # of the project, these modules often only consider the compatibility with the
 # latest versions of Ansible, and when you mix in the various dependencies,
@@ -49,7 +49,7 @@ pip install -U pip
 # Install Ansible and other required modules. 
 pip install -r /vagrant/requirements.txt
 
-# Create a barebones Ansible config for this project.
+# Create a bare-bones Ansible config for this project.
 cat << 'EOF' > ansible.cfg
 [defaults]
 collections_paths = ./ansible_collections
