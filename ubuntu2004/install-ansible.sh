@@ -49,27 +49,48 @@ pip install -U pip
 # Install Ansible and other required modules. 
 pip install -r /vagrant/requirements.txt
 
-# ...and some optional modules:
-pip install azure-cli
+# Create a barebones Ansible config for this project.
+cat << 'EOF' > ansible.cfg
+[defaults]
+collections_paths = ./ansible_collections
+EOF
 
 # Install the Ansible Galaxy modules and collections you want.  Typically,
 # they're installed under $HOME/.ansible/, but most of the time you want to
 # control version updates, so it's recommended to add/update them in your code
 # base as necessary (after functional testing is completed).
+ansible-galaxy collection install -p . -r /vagrant/requirements-ansible-collections.yml
 
-### Install Ansible roles
-#ansible-galaxy install -p ./modules example.example
+# The azure.azcollection Ansible collection requires additional Python modules.
+# See the installation instructions for more detail:
+# * https://galaxy.ansible.com/azure/azcollection
+pip install -r ./ansible_collections/azure/azcollection/requirements-azure.txt
 
-### Install Ansible collections
-ansible-galaxy collection install -p . \
-  azure.azcollection
+# IMPORTANT:  Installing the azure-cli Python module in the same venv as the
+# azure.azcollection Ansible collection is a giant mess.  The Python
+# dependencies in the collection are very old and are stomped all over by
+# azure-cli.  So as a workaround, we're installing azure-cli outside of this
+# venv created above since we're mostly using as a command-line tool anyway (and
+# not part of a code base).  See the Github issue for more detail:
+# * https://github.com/ansible-collections/azure/issues/477
 
-# * TODO add ansible.cfg (maybe?)
+# Exit the venv
+deactivate
+# Update the user's pip.
+pip install --user --upgrade pip
+# Install az (you'll find it in $HOME/.local/bin). 
+# * NOTE:  You will have to logout/in of your current terminal session for $PATH
+#   to be updated.
+pip install --user azure-cli
+
 # * TODO pull a public repo (maybe?)
 
 # Point the user in the right direction
 cat << EOF
 ################################################################################
+
+# NOTE:  If \`echo "\$PATH\` does not contain \$HOME/.local/bin, you will need 
+#   to logout/in for it to be updated.  Otherwise, some tools may not be found.
 
 # Next steps
    
