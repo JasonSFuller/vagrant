@@ -26,7 +26,7 @@
 function error { echo "ERROR: $*" >&2; exit 1; }
 if [[ "$(id -nu)" != "vagrant" ]]; then error "run as the vagrant user"; fi
 
-# Be default in Ubuntu 20.04.4 LTS, you only get Python 3.8 w/o pip or venv, so
+# By default in Ubuntu 20.04.4 LTS, you only get Python 3.8 w/o pip or venv, so
 # we need to install them.  These should be stable, so you shouldn't need to pin
 # versions here.  Likely, you will _want_ the updates from the distro's vendor.
 sudo apt -y install python3-pip python3-venv
