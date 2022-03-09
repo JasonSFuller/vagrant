@@ -72,7 +72,7 @@ ansible-galaxy collection install -p . \
 # * TODO pull a public repo (maybe?)
 
 # Point the user in the right direction
-cat << 'EOF'
+cat << EOF
 ################################################################################
 
 # Next steps
