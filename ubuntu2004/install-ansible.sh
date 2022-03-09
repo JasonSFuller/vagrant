@@ -13,7 +13,7 @@
 # latest versions of Ansible, and when you mix in the various dependencies,
 # things can get out of hand quickly.
 #
-# Below is _one_ way you might control these changes in a pipeline to 
+# Below is _one_ way you might control these changes in a pipeline.
 #
 # jfuller: tested 2022-03-09 on Ubuntu 20.04.4 LTS
 #   https://app.vagrantup.com/ubuntu/boxes/focal64/versions/20220308.0.0
@@ -40,15 +40,17 @@ python3 -m venv .venv
 # shellcheck source=/dev/null
 source ./.venv/bin/activate
 
+# * TODO replace with pip commands below and use a requirements.txt (maybe?) 
+# * TODO use `pip freeze` to nail down package versions for demos/training.
+
 # Have the package installer for Python (pip) updated itself inside the venv.
-# IMPORTANT:  Don't run this as root or mess with the OS installed versions.
+# * IMPORTANT:  Don't run this as root or mess with the OS installed versions.
 #   Modules installed by the package manager (`apt`) should only be updated by
 #   the package manager (and not pip).
 pip install -U pip
 
-# Install Ansible and other required modules.
-# NOTE if you want to pin to a specific version use `ansible==2.11.9` below.
-# TODO replace with pip requirements.txt (maybe?) use `pip freeze` to nail down package versions
+# Install Ansible and other required modules. 
+# * NOTE if you want to pin to a specific version use `ansible==2.11.9` below. 
 pip install ansible paramiko
 
 # ...and some optional modules:
@@ -66,8 +68,8 @@ pip install azure-cli
 ansible-galaxy collection install -p . \
   azure.azcollection
 
-# TODO add ansible.cfg (maybe?)
-# TODO pull a public repo (maybe?)
+# * TODO add ansible.cfg (maybe?)
+# * TODO pull a public repo (maybe?)
 
 # Point the user in the right direction
 cat << 'EOF'
