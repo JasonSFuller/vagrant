@@ -40,9 +40,6 @@ python3 -m venv .venv
 # shellcheck source=/dev/null
 source ./.venv/bin/activate
 
-# * TODO replace with pip commands below and use a requirements.txt (maybe?) 
-# * TODO use `pip freeze` to nail down package versions for demos/training.
-
 # Have the package installer for Python (pip) updated itself inside the venv.
 # * IMPORTANT:  Don't run this as root or mess with the OS installed versions.
 #   Modules installed by the package manager (`apt`) should only be updated by
@@ -50,8 +47,7 @@ source ./.venv/bin/activate
 pip install -U pip
 
 # Install Ansible and other required modules. 
-# * NOTE if you want to pin to a specific version use `ansible==2.11.9` below. 
-pip install ansible paramiko
+pip install -r /vagrant/requirements.txt
 
 # ...and some optional modules:
 pip install azure-cli
