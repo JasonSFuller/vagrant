@@ -40,7 +40,7 @@ python3 -m venv .venv
 # shellcheck source=/dev/null
 source ./.venv/bin/activate
 
-# Have the package installer for Python (pip) updated itself inside the venv.
+# Have the package installer for Python (pip) update itself inside the venv.
 # * IMPORTANT:  Don't run this as root or mess with the OS installed versions.
 #   Modules installed by the package manager (`apt`) should only be updated by
 #   the package manager (and not pip).
@@ -55,10 +55,11 @@ cat << 'EOF' > ansible.cfg
 collections_paths = ./ansible_collections
 EOF
 
-# Install the Ansible Galaxy modules and collections you want.  Typically,
-# they're installed under $HOME/.ansible/, but most of the time you want to
-# control version updates, so it's recommended to add/update them in your code
-# base as necessary (after functional testing is completed).
+# Install the Ansible Galaxy collections you want.  Typically, they're installed
+# under $HOME/.ansible/, but most of the time you want to control version
+# updates, so it's recommended to add/update them in your code base as necessary
+# (after functional testing is completed).
+#ansible-galaxy install -p ./roles -r /vagrant/requirements-ansible-roles.yml
 ansible-galaxy collection install -p . -r /vagrant/requirements-ansible-collections.yml
 
 # The azure.azcollection Ansible collection requires additional Python modules.
@@ -69,9 +70,9 @@ pip install -r ./ansible_collections/azure/azcollection/requirements-azure.txt
 # IMPORTANT:  Installing the azure-cli Python module in the same venv as the
 # azure.azcollection Ansible collection is a giant mess.  The Python
 # dependencies in the collection are very old and are stomped all over by
-# azure-cli.  So as a workaround, we're installing azure-cli outside of this
-# venv created above since we're mostly using as a command-line tool anyway (and
-# not part of a code base).  See the Github issue for more detail:
+# azure-cli.  So as a workaround, we're installing azure-cli outside of the venv
+# since we're mostly using as a command-line tool anyway (and not part of a code
+# base).  See the Github issue for more detail:
 # * https://github.com/ansible-collections/azure/issues/477
 
 # Exit the venv
