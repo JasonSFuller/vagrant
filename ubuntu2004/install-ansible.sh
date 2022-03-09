@@ -28,11 +28,11 @@ if [[ "$(id -nu)" != "vagrant" ]]; then error "run as the vagrant user"; fi
 
 # Be default in Ubuntu 20.04.4 LTS, you only get Python 3.8 w/o pip or venv, so
 # we need to install them.  These should be stable, so you shouldn't need to pin
-# versions here.  Likely, you will want the updates from the distro's vendor.
+# versions here.  Likely, you will _want_ the updates from the distro's vendor.
 sudo apt -y install python3-pip python3-venv
 
 # Create an Ansible folder for testing and create a Python virtual environment,
-# so we don't disturb other Python dependencies elsewhere for the OS (or for the
+# so we don't disturb other Python dependencies elsewhere on the OS (or for the
 # user's other projects).
 mkdir -p "$HOME/src/ansible-example"
 cd "$_" || error "failed to create dir"
@@ -42,8 +42,8 @@ source ./.venv/bin/activate
 
 # Have the package installer for Python (pip) update itself inside the venv.
 # * IMPORTANT:  Don't run this as root or mess with the OS installed versions.
-#   Modules installed by the package manager (`apt`) should only be updated by
-#   the package manager (and not pip).
+#   Modules _installed_ by the package manager (`apt`) should **only** be
+#   _updated_ by the package manager (and not pip).
 pip install -U pip
 
 # Install Ansible and other required modules. 
