@@ -1,0 +1,14 @@
+[data-md-color-scheme="default"] {
+    --md-primary-fg-color:        #CA2127;
+    --md-primary-fg-color--light: #E76A6E;
+    --md-primary-fg-color--dark:  #721316;
+    --md-accent-fg-color:               #CA2127;
+    --md-accent-fg-color--transparent:  #CA212733;
+}
+[data-md-color-scheme="slate"] {
+    --md-primary-fg-color:        #00AEEF;
+    --md-primary-fg-color--light: #57D1FF;
+    --md-primary-fg-color--dark:  #00648A;
+    --md-accent-fg-color:               #00AEEF;
+    --md-accent-fg-color--transparent:  #00AEEF33;
+}
