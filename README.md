@@ -50,6 +50,8 @@ Vagrant offers plugins to extend it's functionality.  These are the ones I use.
   common), this will auto-install the VBoxGuestAdditions during the provisioning
   process, which helps with all manner of things (better folder sync support,
   graphics compatibility, convenient console GUI fixes, _etc_).
+  * NOTE:  Use this plugin with care.  It can cause builds to be slower and can
+    sometimes cause issues.
 
 Install these with:
 
@@ -57,5 +59,5 @@ Install these with:
 vagrant plugin install vagrant-reload
 vagrant plugin install vagrant-scp
 vagrant plugin install vagrant-sshfs
-vagrant plugin install vagrant-vbguest
+vagrant plugin install vagrant-vbguest # use with care
 ```
