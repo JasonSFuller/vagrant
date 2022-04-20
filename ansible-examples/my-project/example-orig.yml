@@ -1,0 +1,48 @@
+---
+
+# passed via ansible survey:
+# - f5_server
+# - profile_name
+# - parent_name
+
+- name: F5 Modify Client SSL Parent Profile
+  hosts: "{{ f5_server }}"
+  connection: local
+  gather_facts: no
+  vars:
+    provider:
+      server: "{{ inventory_hostname }}"
+      server_port: 443
+      validate_certs: no
+
+  tasks:
+    - name: Gather Device Facts
+      bigip_device_info:
+        gather_subset:
+          - devices
+        provider: "{{ provider }}"
+      delegate_to: localhost 
+      ignore_errors: yes
+      register: bigip_device_info
+
+    - name: Get Failover State
+      set_fact:
+        result: "{{bigip_device_info.devices| json_query(query_string)}}"
+      vars:
+         query_string: "[?self=='yes'].failover_state"
+
+    - debug: msg="{{result}}"
+
+    - name: Modify Client SSL Profile
+      bigip_profile_client_ssl:
+        name: "{{ profile_name }}"
+        parent: "{{ parent_name }}"
+        provider: "{{ provider }}"
+      when: " 'active' in result "
+      delegate_to: localhost
+
+    - name: Save Config
+      bigip_config:
+        save: yes
+        provider: "{{ provider }}"
+      delegate_to: localhost

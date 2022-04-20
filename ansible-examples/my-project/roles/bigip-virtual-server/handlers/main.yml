@@ -1,0 +1,14 @@
+---
+- name: Save config
+  bigip_config:
+    provider: "{{ provider }}"
+    save: yes
+  #listen: Save and sync
+
+### UNTESTED ###
+# - name: Sync configuration from device to group
+#   bigip_configsync_action:
+#     provider: "{{ provider }}"
+#     device_group: "{{ dg_name }}" # specify in inventory
+#     sync_device_to_group: yes
+#   listen: Save and sync

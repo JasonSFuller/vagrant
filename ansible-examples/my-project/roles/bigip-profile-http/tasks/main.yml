@@ -1,0 +1,50 @@
+---
+
+- name: DEBUG var profile_http
+  debug: var=profile_http
+
+- name: Validate required input
+  assert:
+    that:
+      # required for auth to bigip_* modules
+      - "provider is defined"
+      - "provider.server is defined"
+      - "provider.server | ipaddr"
+      # required for bigip_profile_http module
+      - "profile_http is defined"
+      - "profile_http.name is defined"
+
+- block:
+
+  - name: Gather device facts
+    bigip_device_info:
+      provider: "{{ provider }}"
+      gather_subset: devices
+    register: bigip_device_info
+    when: failover_state is not defined
+    ignore_errors: true
+
+  - name: Get failover state
+    set_fact:
+      failover_state: "{{ bigip_device_info.devices | json_query(\"[?self=='yes'].failover_state | [0]\") }}"
+
+  when: failover_state is not defined
+
+- block:
+
+  - name: Update HTTP profile
+    bigip_profile_http:
+      # required
+      provider:     "{{ provider }}"
+      name:         "{{ profile_http.name }}"
+      # optional
+      # --- FOR EXAMPLE PURPOSES ONLY (demonstrating role defaults) ------------
+      insert_xforwarded_for: "{{ profile_http.insert_xforwarded_for | default(profile_http_insert_xforwarded_for_default, true) }}"
+      redirect_rewrite:      "{{ profile_http.redirect_rewrite      | default(profile_http_redirect_rewrite_default, true) }}"
+      # --- THIS IS MORE "CORRECT" ---------------------------------------------
+      #insert_xforwarded_for: "{{ profile_http.insert_xforwarded_for | default(omit, true) }}"
+      #redirect_rewrite:      "{{ profile_http.redirect_rewrite      | default(omit, true) }}"
+      state:                 "{{ profile_http.state                 | default(omit, true) }}"
+    notify: Save config
+
+  when: failover_state == 'active'

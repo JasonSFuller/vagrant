@@ -1,0 +1,15 @@
+
+--------------------------------------------------------------------------------
+According to {{ ansible_facts.hostname }}, today is {{ ansible_facts.date_time.weekday }}!
+--------------------------------------------------------------------------------
+
+Other date/time variables:
+
+{% if 'date_time' in ansible_facts %}
+key                   value
+--------------------  ----------------------------
+{% for key, value in ansible_facts.date_time.items() %}
+{{ "{:>20}".format(key) }}  {{ value }}
+{% endfor %}
+{% endif %}
+

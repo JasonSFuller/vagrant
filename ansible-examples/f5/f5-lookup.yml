@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+
+    - name: Verify app IP address
+      assert:
+        that: app_ip | ipaddr
+
+    - name: Get F5 management interface
+      local_action:
+        module: command
+        argv:
+          - ./f5-lookup.sh
+          - "{{ app_ip }}"
+      register: f5_lookup
+      
+    - debug:
+        var: f5_lookup.stdout_lines
+      when: f5_lookup.rc == 0

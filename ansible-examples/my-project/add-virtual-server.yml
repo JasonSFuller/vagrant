@@ -1,0 +1,34 @@
+---
+- name: Create virtual server
+  hosts: all
+  connection: local
+  gather_facts: false
+  vars:
+    provider:
+      server: "{{ inventory_hostname }}"
+      server_port: 8443
+      validate_certs: no
+
+  roles:
+    - role: bigip-pool
+      pool:
+        name: "{{ ui_pool_name }}"
+      when: ui_pool_name is defined and ui_pool_name != ''
+
+    - role: bigip-profile-http
+      profile_http:
+        name:             "{{ ui_profile_name }}"
+        proxy_type:       "{{ ui_profile_insert_xforwarded_for | default('') }}"
+        redirect_rewrite: "{{ ui_profile_redirect_rewrite      | default('') }}"
+      when: ui_profile_name is defined and ui_profile_name != ''
+
+    - role: bigip-virtual-server
+      virtual_server:
+        # required
+        name:         "{{ ui_vs_name }}"
+        destination:  "{{ ui_vs_destination }}"
+        port:         "{{ ui_vs_port }}"
+        ip_protocol:  "{{ ui_vs_ip_protocol }}"
+        # optional
+        all_profiles: "{{ ui_profile_name }}"
+        pool:         "{{ ui_pool_name }}"

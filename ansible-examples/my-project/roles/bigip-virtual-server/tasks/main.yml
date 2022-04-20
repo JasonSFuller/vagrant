@@ -1,0 +1,67 @@
+---
+- name: Validate required input
+  assert:
+    that:
+      # required for auth to bigip_* modules
+      - provider is defined
+      - provider.server is defined
+      - provider.server | ipaddr
+      # required for bigip_virtual_server module
+      - virtual_server is defined
+      - virtual_server.name is defined
+      - virtual_server.destination is defined
+
+- block:
+
+  # Query the device when required, but short-circuit if multiple roles are
+  # used, and the current device's state is already known.
+  - name: Gather device facts
+    bigip_device_info:
+      provider: "{{ provider }}"
+      gather_subset: devices
+    register: bigip_device_info
+    when: failover_state is not defined
+    ignore_errors: true
+
+  - name: Get failover state
+    set_fact:
+      failover_state: "{{ bigip_device_info.devices | json_query(\"[?self=='yes'].failover_state | [0]\") }}"
+
+  when: failover_state is not defined
+
+- block:
+
+  - name: Update virtual server
+    bigip_virtual_server:
+      # required
+      provider:     "{{ provider }}"
+      name:         "{{ virtual_server.name }}"
+      destination:  "{{ virtual_server.destination }}"
+      # required by team/convention (but will use defaults if not defined or empty)
+      port:         "{{ virtual_server.port         | default(virtual_server_port_default, true) }}"
+      ip_protocol:  "{{ virtual_server.ip_protocol  | default(virtual_server_ip_protocol_default, true) }}"
+      # optional
+      all_profiles: "{{ virtual_server.all_profiles | default(omit, true) }}"
+      pool:         "{{ virtual_server.pool         | default(omit, true) }}"
+      state:        "{{ virtual_server.state        | default(omit, true) }}"
+    notify: Save config
+
+  # NOTE:  Depending on what you're doing, especially if you have multiple
+  # tasks, you may want to add "roll-back" functionality here (by using the
+  # `rescue` keyword) to "undo" any actions from above in the case where an
+  # incomplete play may leave your config in an inconsistent state due to a
+  # failure in one of the modules.  Alternatively, you could skip it and add
+  # "notify: Save config" to **all** the above modules (rather than just the
+  # last one), if saving your work "as you go" is more appropriate for your use
+  # case.
+
+  ### Example ###
+  # rescue:
+  #  - name: Remove virtual server
+  #    bigip_virtual_server:
+  #      provider: "{{ provider }}"
+  #      name:     "{{ virtual_server.name }}"
+  #      state:    absent
+  #    notify: Save config
+
+  when: failover_state == 'active'

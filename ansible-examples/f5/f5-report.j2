@@ -1,0 +1,51 @@
+##### REPORT HEADER #####
+
+{% if 'virtual_servers' in bigip_facts %}
+{% for vs in bigip_facts.virtual_servers %}
+{% if app_ip == vs.destination_address %}
+- Virtual Server Name:            {{ vs.name }}
+  Virtual Server Destination:     {{ vs.destination }}
+  Virtual Server Status:          {{ vs.availability_status }}
+  Virtual Server Status Reason:   {{ vs.status_reason }}
+  Virtual Server Default Pool:    {% if 'default_pool' not in vs %}[none]
+{% else %}
+
+    Pool Name:      {{ vs.default_pool }}
+{% if 'ltm_pools' in bigip_facts %}{% for pool in bigip_facts.ltm_pools %}{% if pool.full_path == vs.default_pool %}
+    Pool Status:    {{ pool.status_reason }}
+    Pool Members:   {% if 'members' not in pool %}[none]
+{% else %}
+
+{% for member in pool.members %}
+      - {{ member.name }} ({{ member.real_state }})
+{% endfor %}
+{% endif %}
+    Pool Monitors:  {% if 'monitors' not in pool %}[none]
+{% else %}
+
+{% for monitor in pool.monitors %}
+      - {{ monitor}}
+{% endfor %}
+{% endif %}
+    Current Connections:  {{ pool.current_sessions }}
+{% endif %}{% endfor %}{% endif %}
+{% endif %}
+  Virtual Server Profiles:        {% if 'profiles' not in vs %}[none]
+{% else %}
+
+{% for profile in vs.profiles %}
+    - {{ profile.name }}
+{% endfor %}
+{% endif %}
+  Virtual Server iRules:          {% if 'irules' not in vs %}[none]
+{% else %}
+
+{% for irule in vs.irules %}
+    - {{ irule }}
+{% endfor %}
+{% endif %}
+
+{% endif %}
+{% endfor %}
+{% endif %}
+##### REPORT FOOTER #####

@@ -1,0 +1,5 @@
+---
+- name: Save config
+  bigip_config:
+    provider: "{{ provider }}"
+    save: yes

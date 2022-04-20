@@ -1,0 +1,84 @@
+---
+- name: Lab testing
+  hosts: all
+  connection: local
+  gather_facts: false
+  vars:
+    provider:
+      server: "{{ inventory_hostname }}"
+      #server_port: 443
+      server_port: 8443
+      validate_certs: no
+
+  tasks:
+    - name: Gather device facts
+      bigip_device_info:
+        provider: "{{ provider }}"
+        gather_subset:
+          - devices
+      ignore_errors: yes
+      register: bigip_device_info
+
+    - name: DEBUG var bigip_device_info
+      debug: var=bigip_device_info
+
+    - name: Get failover state
+      set_fact:
+        failover_state: "{{ bigip_device_info.devices | json_query(\"[?self=='yes'].failover_state | [0]\") }}"
+
+    - name: DEBUG var failover_state
+      debug: var=failover_state
+
+    - name: TEST for active
+      debug:
+        msg: "true"
+      when: "'active' in failover_state"
+
+    # - name: Create HTTP profile
+    #   bigip_profile_http:
+    #     provider: "{{ provider }}"
+    #     name: jfuller-test1
+    #     state: present
+
+    # - name: CREATE POOL
+    #   bigip_pool:
+    #     provider: "{{provider}}"
+    #     name: "jfuller-test2"
+    #     lb_method: "round-robin"
+
+   
+    # - name: CREATE POOL
+    #   bigip_pool:
+    #     provider: "{{provider}}"
+    #     name: "http_pool"
+    #     lb_method: "round-robin"
+    #     monitors: "/Common/http"
+    #     monitor_type: "and_list"
+
+    # - name: ADD POOL MEMBERS
+    #   bigip_pool_member:
+    #     provider: "{{provider}}"
+    #     state: "present"
+    #     name: "{{hostvars[item].inventory_hostname}}"
+    #     host: "{{hostvars[item].ansible_host}}"
+    #     port: "80"
+    #     pool: "http_pool"
+    #   loop: "{{ groups['web'] }}"
+
+    # - name: ADD VIRTUAL SERVER
+    #   bigip_virtual_server:
+    #     provider: "{{provider}}"
+    #     name: "vip"
+    #     destination: "{{private_ip}}"
+    #     port: "443"
+    #     enabled_vlans: "all"
+    #     all_profiles: ['http','clientssl','oneconnect']
+    #     pool: "http_pool"
+    #     snat: "Automap"
+
+
+    # - name: Save Config
+    #   bigip_config:
+    #     save: yes
+    #     provider: "{{ provider }}"
+    #   delegate_to: localhost

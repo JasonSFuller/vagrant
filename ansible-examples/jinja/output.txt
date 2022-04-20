@@ -1,0 +1,28 @@
+
+--------------------------------------------------------------------------------
+According to ansible, today is Thursday!
+--------------------------------------------------------------------------------
+
+Other date/time variables:
+
+key                   value
+--------------------  ----------------------------
+                year  2022
+               month  02
+             weekday  Thursday
+      weekday_number  4
+          weeknumber  05
+                 day  03
+                hour  21
+              minute  01
+              second  56
+               epoch  1643922116
+                date  2022-02-03
+                time  21:01:56
+       iso8601_micro  2022-02-03T21:01:56.021499Z
+             iso8601  2022-02-03T21:01:56Z
+       iso8601_basic  20220203T210156021499
+ iso8601_basic_short  20220203T210156
+                  tz  UTC
+           tz_offset  +0000
+

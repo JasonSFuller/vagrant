@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: cleaning up previous output.txt
+      file:
+        path: output.txt
+        state: absent
+
+    - name: gather some basic details about localhost
+      setup:
+        gather_subset:
+          - 'min'
+
+    - name: show the ansible date and time fact object
+      debug:
+        var: ansible_facts
+
+    - name: write the output file using a template
+      template:
+        src: template.j2
+        dest: output.txt
+        

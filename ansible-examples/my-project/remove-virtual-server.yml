@@ -1,0 +1,38 @@
+---
+- name: Remove virtual server
+  hosts: all
+  connection: local
+  gather_facts: false
+  vars:
+    provider:
+      server: "{{ inventory_hostname }}"
+      server_port: 8443
+      validate_certs: no
+
+  roles:
+    - role: bigip-virtual-server
+      virtual_server:
+        name: "jfuller-test-virtual-server"
+        destination: ""
+        state: absent
+
+    - role: bigip-pool
+      pool:
+        name: jfuller-test-pool
+        state: absent
+  
+    - role: bigip-profile-http
+      profile_http:
+        name: jfuller-test-profile
+        state: absent
+
+    - role: bigip-profile-http
+      profile_http:
+        name: jfuller-test-profile1
+        state: absent
+
+    - role: bigip-profile-http
+      profile_http:
+        name: jfuller-test-profile2
+        state: absent
+

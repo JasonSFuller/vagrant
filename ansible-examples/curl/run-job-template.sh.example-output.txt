@@ -1,0 +1,16 @@
+Launching job template (id: 7)...
+Job (id: 74) created from "Demo Job Template" job template (id: 7)
+2022-02-18 15:25:46 UTC -- template(7)="Demo Job Template" job="74" status="pending"
+2022-02-18 15:25:47 UTC -- template(7)="Demo Job Template" job="74" status="pending"
+2022-02-18 15:25:48 UTC -- template(7)="Demo Job Template" job="74" status="running"
+2022-02-18 15:25:50 UTC -- template(7)="Demo Job Template" job="74" status="successful"
+
+PLAY [Hello World Sample] ******************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [localhost]
+
+TASK [Hello Message] ***********************************************************
+ok: [localhost] => {
+    "msg": "Hello World!"
+}

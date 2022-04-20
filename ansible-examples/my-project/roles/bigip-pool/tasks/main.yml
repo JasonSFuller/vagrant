@@ -1,0 +1,39 @@
+---
+- name: Validate required input
+  assert:
+    that:
+      # required for auth to bigip_* modules
+      - provider is defined
+      - provider.server is defined
+      - provider.server | ipaddr
+      # required for bigip_pool module
+      - pool is defined
+      - pool.name is defined
+
+- block:
+
+  - name: Gather device facts
+    bigip_device_info:
+      provider: "{{ provider }}"
+      gather_subset: devices
+    register: bigip_device_info
+    when: failover_state is not defined
+    ignore_errors: true
+
+  - name: Get failover state
+    set_fact:
+      failover_state: "{{ bigip_device_info.devices | json_query(\"[?self=='yes'].failover_state | [0]\") }}"
+
+  when: failover_state is not defined
+
+- block:
+
+  - name: Update pool
+    bigip_pool:
+      provider:     "{{ provider }}"
+      name:         "{{ pool.name }}"
+      state:        "{{ pool.state     | default(omit, true) }}"
+
+    notify: Save config
+
+  when: failover_state == 'active'

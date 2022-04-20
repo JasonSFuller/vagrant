@@ -1,0 +1,27 @@
+---
+- name: Create virtual server
+  hosts: all
+  connection: local
+  gather_facts: false
+  vars:
+    provider:
+      server: "{{ inventory_hostname }}"
+      server_port: 8443
+      validate_certs: no
+
+  roles:
+    - role: bigip-pool
+      pool:
+        name: jfuller-test-pool
+
+    - role: bigip-profile-http
+      profile_http:
+        name: jfuller-test-profile
+
+    - role: bigip-virtual-server
+      virtual_server:
+        name: "jfuller-test-virtual-server"
+        destination: "172.23.20.40"
+        #port: "80"
+        #all_profiles: jfuller-test-profile  # optional parameter
+        #pool: jfuller-test-pool             # optional parameter

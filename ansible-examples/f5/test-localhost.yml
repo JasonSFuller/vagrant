@@ -1,0 +1,50 @@
+---
+
+# PURPOSE:  Testing the 'job isolation' settings in Tower.
+
+- hosts: localhost
+  tasks:
+    - name: Add test-user5 (localhost)
+      ansible.builtin.user:
+        name: test-user5
+      ignore_errors: yes
+
+    - name: Add test-user6 (localhost delegate_to)
+      ansible.builtin.user:
+        name: test-user6
+      delegate_to: localhost
+      ignore_errors: yes
+
+    - name: Add test-user7 (localhost become)
+      ansible.builtin.user:
+        name: test-user7
+      ignore_errors: yes
+      become: yes
+
+    - name: Add test-user8 (localhost become delegate_to)
+      ansible.builtin.user:
+        name: test-user8
+      delegate_to: localhost
+      ignore_errors: yes
+      become: yes
+
+    - name: grep test /etc/passwd
+      shell: grep test /etc/passwd
+      ignore_errors: yes
+
+    - name: Create /etc/test-localhost.txt
+      copy:
+        dest: /etc/test-localhost.txt
+        content: "test localhost"
+      ignore_errors: yes
+
+    - name: Create /etc/test-localhost-become.txt
+      copy:
+        dest: /etc/test-localhost-become.txt
+        content: "test localhost become"
+      ignore_errors: yes
+      become: yes
+
+    - name: 'ls -la /etc/test*'
+      shell: 'ls -la /etc/test*'
+      ignore_errors: yes

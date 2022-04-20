@@ -1,0 +1,68 @@
+---
+# The 'hosts: localhost' is only for the demo.  In practice, you'd use an
+# Ansible inventory (and perhaps --limit) to restrict the play to the hosts
+# you're interested in.  Example below.  For more info see:
+#   https://docs.ansible.com/ansible/2.9/user_guide/intro_inventory.html
+#   https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html#patterns-and-ad-hoc-commands
+
+- hosts: localhost
+#- hosts: "{{ nodes | default(omit) }}"
+  gather_facts: false
+  tasks:
+
+    - name: Verify app IP address
+      assert:
+        that: app_ip | ipaddr
+
+    # Only for the demo
+    - name: Show nodes
+      debug:
+        var: nodes
+
+################################################################################
+
+    # Import the JSON and convert it to an object as if returned from the
+    # bigip_device_info task (which registers the var 'bigip_facts').  This
+    # simulates the task commented out below.
+    - name: Collect bigip facts
+      set_fact:
+        bigip_facts: "{{ lookup('file', 'Jason_Output.txt.json') | from_json }}"
+      no_log: true # only for keeping the command-line output small
+
+    #- name: Collect bigip facts
+    #  bigip_device_info:
+    #    gather_subset:
+    #      - virtual-servers
+    #      - ltm-pools
+    #    provider:
+    #      user: "{{ username }}"
+    #      password: "{{ password }}"
+    #  register: bigip_facts
+
+################################################################################
+
+    - name: Create a temporary file (for the report)
+      local_action:
+        module: tempfile
+        state: file
+        suffix: .tmp
+      register: f5_report
+
+    - name: Generate report
+      local_action:
+        module: template
+        src: f5-report.j2
+        dest: "{{ f5_report.path }}"
+
+    - name: Read report
+      local_action:
+        module: command
+        argv:
+          - cat
+          - "{{ f5_report.path }}"
+        
+    - name: Remove temporary file
+      local_action:
+        module: file
+        path: "{{ f5_report.path }}"
+        state: absent

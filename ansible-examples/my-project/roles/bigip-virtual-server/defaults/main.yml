@@ -1,0 +1,3 @@
+---
+virtual_server_port_default: "81"
+virtual_server_ip_protocol_default: "tcp"

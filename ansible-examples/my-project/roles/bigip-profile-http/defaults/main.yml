@@ -1,0 +1,12 @@
+---
+# Override bigip_profile_http module default for insert_xforwarded_for parameter
+# * module default      = inherit from parent profile
+# * this role's default = "yes"
+# https://docs.ansible.com/ansible/latest/collections/f5networks/f5_modules/bigip_profile_http_module.html#parameter-insert_xforwarded_for
+profile_http_insert_xforwarded_for_default: "yes"
+
+# Override bigip_profile_http module default for redirect_rewrite parameter
+# * module default      = inherit from parent profile
+# * this role's default = "all"
+# https://docs.ansible.com/ansible/latest/collections/f5networks/f5_modules/bigip_profile_http_module.html#parameter-redirect_rewrite
+profile_http_redirect_rewrite_default: "all"
