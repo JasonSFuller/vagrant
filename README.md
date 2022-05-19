@@ -6,26 +6,32 @@
 
 ## Install Vagrant
 
-Vagrant is an easy way for developers to spin up new hosts for testing.  It
-relies upon an underlying "provider" to actually perform the virtualization and
-networking for a guest VM, but Vagrant helps by providing a convenient and
-[somewhat] consistent interface for managing these resources quickly.
+[Vagrant](https://www.vagrantup.com/) is an easy way for developers to spin up
+new hosts for testing.  It relies upon an underlying "provider" to actually
+perform the virtualization and networking for a guest VM, but Vagrant helps by
+providing a convenient and somewhat consistent interface for managing these
+resources quickly.
 
 Typically, [VirtualBox](https://www.virtualbox.org/) is the go-to provider,
-since it's fairly cross-platform and offers a Windows, MacOS, and Linux
-installer, but the backend provider could be Hyper-V on Windows, KVM (libvirt)
-on Linux, or even a cloud provider like AWS--though there aren't always images
-on [app.vagrantup.com](https://app.vagrantup.com) for other providers, so use
+since it's fairly cross-platform and offers a Windows, Mac, and Linux installer,
+but the backend provider could be Hyper-V on Windows, KVM (libvirt) on Linux, or
+even a cloud provider like AWS--though there aren't always images on
+[app.vagrantup.com](https://app.vagrantup.com) for other providers, so use
 VirtualBox if you can.
 
-Follow the Vagrant installation guide appropriate for your environment:
+Follow the VirtualBox and Vagrant installation guides appropriate for your
+environment:
 
+* <https://www.virtualbox.org/manual/ch02.html>
 * <https://www.vagrantup.com/docs/installation>
+
 
 
 ## Vagrant plugins
 
-Vagrant offers plugins to extend it's functionality.  These are the ones I use.
+Vagrant offers
+[plugins](https://github.com/hashicorp/vagrant/wiki/Available-Vagrant-Plugins)
+to extend it's functionality.  These are the ones I use.
 
 * **vagrant-reload** -- Normally, when a guest reboots during the provisioning
   process, it will cause the `vagrant up` or `vagrant reload` to fail, or it
