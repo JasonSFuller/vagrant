@@ -1,0 +1,45 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# https://docs.vagrantup.com
+# https://vagrantcloud.com/search
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "fedora/36-cloud-base"
+  config.vm.box_version = "36-20220504.1"
+  config.vm.define :fedora36 do |box|
+    box.vm.host_name = "fedora36"
+    #box.vm.network "private_network", type: "dhcp"
+    #box.vm.network "private_network", ip: "192.168.56.20"
+    #box.vm.network "forwarded_port", guest: 80,   host: 8080
+    #box.vm.network "forwarded_port", guest: 443,  host: 8443
+    box.vm.network "forwarded_port", guest: 3389, host: 3389
+    #box.vm.synced_folder ".", "/vagrant", type: "sshfs" # sshfs = 2-way sync
+    box.vm.provider :virtualbox do |v|
+      #v.memory = 4096
+      v.memory = 8192
+      v.cpus = 2
+    end
+    # IMPORTANT:  Run as non-root user!
+    box.vm.provision "shell", privileged: false, inline: <<~'SHELL'
+      # update os
+      sudo dnf -y update
+      # install desktop
+      sudo dnf -y group install workstation-product-environment
+      sudo cp -a /etc/gdm/custom.conf{,.orig}
+      sudo tee /etc/gdm/custom.conf << 'EOF'
+      [daemon]
+      AutomaticLoginEnable=True
+      AutomaticLogin=vagrant
+      EOF
+      sudo systemctl set-default graphical.target
+      sudo systemctl isolate
+      # firewall (disabled by default, but just in case)
+      sudo firewall-cmd --permanent --add-service=rdp
+      sudo firewall-cmd --reload
+      # misc
+      sudo dnf -y install vim
+    SHELL
+  end
+end
+

@@ -18,5 +18,4 @@ Vagrant.configure("2") do |config|
       echo 'TEST MESSAGE:  Yay!  It worked!'
     SHELL
   end
-
 end
