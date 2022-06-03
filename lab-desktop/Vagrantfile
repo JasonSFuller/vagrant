@@ -1,16 +1,30 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/focal64"
-  config.vm.box_version = "20220308.0.0"
-  config.vm.define "ubuntu2004" do |box|
-    box.vm.host_name = "ubuntu2004"
-    box.vm.network "private_network", type: "dhcp"
+  config.vm.box = "ubuntu/jammy64"
+  config.vm.box_version = "20220513.0.0"
+  config.vm.define "ubuntu2204" do |box|
+    box.vm.host_name = "ubuntu2204"
     box.vm.network "forwarded_port", guest: 3389,  host: 3389
     box.vm.provider :virtualbox do |v|
       v.memory = 4096
       v.cpus = 2
     end
-    box.vm.provision "shell", privileged: true, inline: <<~'SHELL'
-      echo 'TEST MESSAGE:  Yay!  It worked!'
-    SHELL
+    box.vm.provision "shell"
+      shell.privileged = false
+      shell.inline: <<~'SHELL'
+        # You **MUST** update the repo data, because it's outdated on the images.
+        # Then, tell `apt` not to bother me with questions, install the Ubuntu
+        # Desktop (Gnome 3), and switch over to graphical mode.
+        sudo apt-get update \
+        && sudo DEBIAN_FRONTEND=noninteractive apt-get -y install ubuntu-desktop \
+        && sudo systemctl set-default graphical.target \
+        && sudo systemctl isolate graphical.target
+
+        # Gnome's RDP will stop if the screensaver ever kicks in.  This is "expected"
+        # behavior according to the devs.
+        gsettings set org.gnome.desktop.session idle-delay 0
+
+	# TODO other stuff goes here - cert gen, setting rdp pass, starting svc, etc
+      SHELL
+      shell.reboot = true
   end
 end
