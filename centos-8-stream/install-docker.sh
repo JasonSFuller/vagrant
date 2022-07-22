@@ -36,7 +36,7 @@ cat <<- 'MESSAGE'
 #                                                                              #
 #   IMPORTANT:  You must log out/in for the Linux group permissions to take    #
 #   effect.  Otherwise, you might not have access to the local Docker socket   #
-#   to issue commands and recieve these types of errors:                       #
+#   to issue commands and receive these types of errors:                       #
 #                                                                              #
 #     $ docker ps                                                              #
 #     Got permission denied while trying to connect to the Docker daemon       #

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "WARNING: unfinished" >&2
+exit 1
 
 # install a virtual environment so we don't disturb other python dependencies 
 # elsewhere for the OS (or for the user)
