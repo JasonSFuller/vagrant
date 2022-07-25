@@ -1,35 +1,65 @@
-Vagrant.require_version ">= 2.1.0" # minimum required for triggers
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
 
-user = ENV['REDHAT_SUBMGR_USER']
-pass = ENV['REDHAT_SUBMGR_PASS']
-if !user
-  puts 'ERROR: env var REDHAT_SUBMGR_USER missing'
-  abort
-end
-if !pass
-  puts 'ERROR: env var REDHAT_SUBMGR_PASS missing'
-  abort
-end
+# PRE-REQUISITES
+#   Two shell environment variables are required for auto- registering the host
+#   via subscription manager.  You can store these in a convenient place and
+#   source them when needed.
+# EXAMPLE
+#   $ cat ~/.red_hat_subscription_creds
+#   export RED_HAT_SUBSCRIPTION_MGR_USER='MyRedHatUsername'
+#   export RED_HAT_SUBSCRIPTION_MGR_PASS='MyRedHatPassword'
+#   $ source ~/.red_hat_subscription_creds
+#   $ vagrant up
+
+# Vagrant >= 2.1.0 is the minimum required for triggers, but uh... use latest.
+Vagrant.require_version ">= 2.2.19" # as of 2022-07-22
 
 Vagrant.configure("2") do |config|
 
   config.vm.box = "generic/rhel8"
-  #config.vm.box_version = "3.5.2"
 
-  config.vm.define :rhel8 do |box|
-    box.vm.host_name = "rhel8"
-    #box.vm.network "private_network", type: "dhcp"
-    box.vm.network "private_network", ip: "192.168.56.10"
-    #box.vm.network "forwarded_port", guest: 80,  host: 8080
-    #box.vm.network "forwarded_port", guest: 443, host: 8443
-    box.vm.provider :virtualbox do |v|
-      v.memory = 2048
-      v.cpus = 2
-    end
-    box.vm.provision "shell", privileged: true, inline: <<~'SHELL'
-      echo 'TEST MESSAGE:  Yay!  It worked!'
-    SHELL
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "4096"
+    vb.cpus = "2"
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    echo 'Hello, world!'
+  SHELL
+
+  config.vm.provision "shell", env: {
+    "rh_user" => ENV['RED_HAT_SUBSCRIPTION_MGR_USER'],
+    "rh_pass" => ENV['RED_HAT_SUBSCRIPTION_MGR_PASS']
+  }, inline: <<-SHELL
+    # If the two env vars are defined (not empty), register the guest with
+    # Red Hat so the dnf repos are enabled.
+    if [[ -n "$rh_user" &&  -n "$rh_pass" ]]
+    then
+      subscription-manager register --auto-attach --force \
+        --username "$rh_user" --password "$rh_pass"
+    else
+      echo "INFO: skipping registration (subscription manager env vars missing)"
+    fi
+  SHELL
+
+  # RECOMMENDED
+  #   If your host is Linux or you have Git for Windows, install this plugin:
+  #     vagrant plugin install vagrant-sshfs
+  #   ...so the /vagrant dir is mounted via sshfs (for *painless* two-way sync).
+  # ALTERNATIVE
+  #   If your host machine is Windows and you're using VirtualBox, the default
+  #   ("shared folders," in the "else" below) will give you two-way sync too,
+  #   but it will require VirtualBox's guest additions to be installed on the
+  #   guest OS.  The "vagrant-vbguest" plugin can help with the guest additions
+  #   installation, but it can be slow and awkward to use sometimes.
+  # IMPORTANT
+  #   Vagrant will try to Do The Right Thing but fallback to a one-way copy if
+  #   neither are available.
+  if Vagrant.has_plugin?("vagrant-sshfs")
+    config.vm.synced_folder ".", "/vagrant", type: "sshfs"
+  else
+    config.vm.synced_folder ".", "/vagrant"
   end
 
 end
-
