@@ -61,7 +61,7 @@ fi
 #   during the install.
 # * TODO: Grep'ing the inventory is a bit clumsy and error prone, but Ansible
 #   has not been installed yet (by setup.sh).
-sudo install -m 0755 -d "$HOME/.ssh/"
+sudo install -m 0755 -d "/root/.ssh/"
 grep -oE '\b[A-Za-z0-9\-\.]*\.local\b' /vagrant/inventory \
   | sort -u \
   | ssh-keyscan -f - 2>/dev/null \
