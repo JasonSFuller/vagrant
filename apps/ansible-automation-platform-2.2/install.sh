@@ -49,8 +49,11 @@ cd ansible-automation-platform-setup-bundle-*/ \
 
 # Since the installer (setup.sh) is simply a wrapper for Ansible playbooks, it
 # expects the inventory file to be in a specific location relative to itself and
-# the other directories, so copy it there.
-cp /vagrant/inventory .
+# the other directories, so symlink it here.
+if [[ ! -L inventory ]]; then
+  if [[ -f inventory ]]; then mv inventory{,.orig}; fi
+  ln -s /vagrant/inventory .
+fi
 
 # Validate Ansible can reach all the *.local hosts in the inventory.
 # * NOTE: This step is important because it also creates the ~/.ssh/known_hosts
