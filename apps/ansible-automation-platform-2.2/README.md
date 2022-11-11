@@ -65,14 +65,14 @@ Bring up the Vagrant machines:
 vagrant up
 ```
 
-## Testing and troubleshooting
+## Troubleshooting
 
 From the management node, validate Ansible can log in to all inventory hosts.
 
 ```bash
 # vagrant ssh mgmt # if you haven't already
-cd /vagrant
-sudo ansible -m ping -i /vagrant/inventory all
+cd /home/vagrant/ansible-automation-platform-setup-bundle-*/
+sudo ansible -m ping -i ./inventory all
 ```
 
 Re-run the installation script manually.

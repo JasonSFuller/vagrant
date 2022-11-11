@@ -65,7 +65,7 @@ sudo install -m 0755 -d "$HOME/.ssh/"
 grep -oE '\b[A-Za-z0-9\-\.]*\.local\b' /vagrant/inventory \
   | sort -u \
   | ssh-keyscan -f - 2>/dev/null \
-  | sudo install -m 0600 /dev/stdin "$HOME/.ssh/known_hosts"
+  | sudo install -m 0600 /dev/stdin "/root/.ssh/known_hosts"
 
 # Run the installer (as root).
 printf "Running setup.sh.  This may take a few minutes.  For progress, check:\n"
