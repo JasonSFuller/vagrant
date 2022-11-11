@@ -56,11 +56,11 @@ if [[ ! -L inventory ]]; then
 fi
 
 # Validate Ansible can reach all the *.local hosts in the inventory.
-# * NOTE: This step is important because it also creates the ~/.ssh/known_hosts
-#   file to avoid typing "yes" to accept the SSH fingerprint over and over
-#   during the install.
+# * NOTE: This step is important because it also creates the
+#   /root/.ssh/known_hosts file to avoid typing "yes" to accept the SSH
+#   fingerprint over and over during the install.
 # * TODO: Grep'ing the inventory is a bit clumsy and error prone, but Ansible
-#   has not been installed yet (by setup.sh).
+#   has not been installed by setup.sh yet.
 sudo install -m 0755 -d "/root/.ssh/"
 grep -oE '\b[A-Za-z0-9\-\.]*\.local\b' /vagrant/inventory \
   | sort -u \
@@ -68,6 +68,7 @@ grep -oE '\b[A-Za-z0-9\-\.]*\.local\b' /vagrant/inventory \
   | sudo install -m 0600 /dev/stdin "/root/.ssh/known_hosts"
 
 # Run the installer (as root).
-printf "Running setup.sh.  This may take a few minutes.  For progress, check:\n"
-printf "  %s/%s\n" "$(realpath .)" "setup.out"
+printf "Running setup.sh.  This will take a few minutes.  To check progress, in another terminal:\n"
+printf "  vagrant ssh mgmt"
+printf "  sudo tail -F %s/%s\n" "$(realpath .)" "setup.out"
 sudo ./setup.sh -e '@/vagrant/secrets.yaml' > setup.out
