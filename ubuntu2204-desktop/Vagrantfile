@@ -1,0 +1,41 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Use the latest vagrant, at least as of 2022-07-22.
+Vagrant.require_version ">= 2.2.19"
+
+Vagrant.configure("2") do |config|
+  #-- plugin config ------------------------------------------------------------
+  config.vagrant.plugins = ["vagrant-vbguest", "vagrant-sshfs"]
+  config.vbguest.auto_update = false
+  #config.vbguest.no_remote = true
+
+  #-- guest vm config ----------------------------------------------------------
+  config.vm.define "ubuntu2204" do |guest|
+    guest.vm.box = "ubuntu/jammy64"
+    #guest.vm.box = "generic/ubuntu2204"
+    guest.vm.provider "virtualbox" do |vb|
+      vb.memory = "8192"
+      vb.cpus   = "2"
+      # If you don't set this, you get "Invalid settings detected" in the GUI.
+      vb.customize ['modifyvm', :id, '--graphicscontroller', 'vmsvga']
+      # Some other interesting settings
+      #vb.customize ["modifyvm", :id, "--clipboard-mode", "bidirectional"]
+      #vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+      vb.gui = true
+    end
+    guest.vm.synced_folder ".", "/vagrant", type: "sshfs"
+    guest.vm.provision "shell" do |shell|
+      shell.privileged = true
+      shell.env = { "DEBIAN_FRONTEND" => "noninteractive" }
+      shell.inline = <<-SHELL
+        env
+        apt-get update -y
+        apt-get upgrade -y
+        apt-get install -y ubuntu-desktop-minimal
+        timedatectl set-timezone US/Eastern
+      SHELL
+      shell.reboot = true
+    end
+  end
+end
