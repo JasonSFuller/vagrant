@@ -1,20 +1,53 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Accessing the RHEL package repositories requires registration (via
+# subscription-manager).  Otherwise, DNF commands will fail due to
+# authentication.  The vagrant-registration plugin helps with automating this
+# process.  However, if you have to perform this manually on the guest VM for
+# some reason, this is the equivalent:
+#
+#     subscription-manager register --auto-attach --force
+#
+# A Red Hat username and password (or an organization and activation key) is
+# required.  For lab and development purposes, you can register for a no-cost
+# account at:  https://developers.redhat.com/
+
+# Use the latest vagrant, at least as of 2022-07-22.
+Vagrant.require_version ">= 2.2.19"
+
 Vagrant.configure("2") do |config|
-  config.vm.box = "ansible/tower"
-  config.vm.box_version = "3.8.5"
-  config.vm.define :tower do |box|
-    box.vm.host_name = "ansible-tower"
-    box.vm.network "forwarded_port", guest: 443, host: 8443
-    # NOTE: You'll need `vagrant plugin install vagrant-sshfs` for this to work.
-    box.vm.synced_folder ".", "/vagrant", type: "sshfs" # for 2-way sync
-    box.vm.provider :virtualbox do |vb|
-      vb.memory = 4096
-      vb.cpus = 2
+  #-- plugin config ------------------------------------------------------------
+  config.vagrant.plugins = ["vagrant-sshfs"]
+  # config.vagrant.plugins = ["vagrant-registration", "vagrant-env", "vagrant-sshfs"]
+  # config.env.enable
+  # config.registration.username = ENV['RED_HAT_SUBSCRIPTION_MGR_USER']
+  # config.registration.password = ENV['RED_HAT_SUBSCRIPTION_MGR_PASS']
+  config.vm.synced_folder ".", "/vagrant", type: "sshfs"
+
+  #-- guest vm config ----------------------------------------------------------
+  # ansible automation controller
+  config.vm.define "tower" do |guest|
+    guest.vm.hostname = "tower"
+    guest.vm.box = "ansible/tower"
+    guest.vm.box_version = "3.8.5"
+    guest.vm.network "private_network", type: "dhcp"
+    guest.vm.network "forwarded_port", guest: 443, host: 8443
+    guest.vm.provider "virtualbox" do |vb|
+      vb.memory = "8192"
+      vb.cpus   = "4"
     end
-    #box.vm.provision "shell", privileged: true, inline: <<~'SHELL'
-    #  echo 'TEST MESSAGE:  Yay!  It worked!'
-    #SHELL
   end
+
+  # example server1
+  config.vm.define "server1", primary: true do |guest|
+    guest.vm.hostname = "server1"
+    guest.vm.box = "generic/centos8"
+    guest.vm.network "private_network", type: "dhcp"
+    guest.vm.provider "virtualbox" do |vb|
+      vb.memory = "4096"
+      vb.cpus   = "2"
+    end
+  end
+
 end
