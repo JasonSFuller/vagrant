@@ -1,0 +1,20 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Use the latest vagrant, at least as of 2023-07-13.
+Vagrant.require_version ">= 2.3.7"
+
+Vagrant.configure("2") do |config|
+  #-- guest vm config ----------------------------------------------------------
+  config.vm.box = "fedora-coreos-38.20230625.3.0"
+  config.vm.define :fedora_coreos do |box|
+    box.vm.host_name = "fedora-coreos"
+    box.vm.synced_folder ".", "/vagrant", disabled: true
+    box.vm.provider :virtualbox do |vb|
+      vb.memory = 4096
+      vb.cpus = 2
+      # If you don't set this, you get screen flicker and "Invalid settings detected" in the GUI.
+      vb.customize ['modifyvm', :id, '--graphicscontroller', 'vmsvga']
+    end
+  end
+end
