@@ -1,6 +1,6 @@
-# Ansible Automation Platform 2.2
+# Ansible Automation Platform 2.4
 
-* [Red Hat Ansible Automation Platform 2.2 Installation Guide](https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/2.2/html/red_hat_ansible_automation_platform_installation_guide/index)
+* [Red Hat Ansible Automation Platform 2.4 Installation Guide](https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/2.4/html/red_hat_ansible_automation_platform_installation_guide/index)
 
 
 
@@ -27,15 +27,15 @@
 
 Download the **bundle** and save it to the same directory as the [`Vagrantfile`](Vagrantfile):
 
-* <https://access.redhat.com/downloads/content/480/ver=2.2/rhel---9/2.2/x86_64/product-software>
+* <https://access.redhat.com/downloads/content/480/ver=2.4/rhel---9/2.4/x86_64/product-software>
 
 Your directory should look like this:
 
 ```text
 $ ls -lad ansible-automation-platform-setup-bundle-* Vagrantfile
--rw-r--r--. 1 vagrant vagrant 1472877795 Nov 10 14:06 ansible-automation-platform-setup-bundle-2.2.1-1.1.tar.gz
--rw-r--r--. 1 vagrant vagrant        124 Nov 10 14:09 ansible-automation-platform-setup-bundle-2.2.1-1.1.tar.gz.sha256
--rw-r--r--. 1 vagrant vagrant       2290 Nov 10 19:36 Vagrantfile
+-rwxrwxr-x 1 jfuller jfuller 2054136318 Aug 10 13:59 ansible-automation-platform-setup-bundle-2.4-1.2-x86_64.tar.gz
+-rw-rw-r-- 1 jfuller jfuller        129 Aug 10 14:01 ansible-automation-platform-setup-bundle-2.4-1.2-x86_64.tar.gz.sha256
+-rw-rw-r-- 1 jfuller jfuller       2575 Aug 10 13:45 Vagrantfile
 ```
 
 Create a `.env` file.  
