@@ -1,0 +1,15 @@
+# don't track the installer binaries and expanded dir
+ansible-automation-platform-setup-bundle-*.tar.gz
+ansible-automation-platform-setup-bundle-*/
+
+# don't track aap installation secrets
+secrets.yaml
+secrets.yml
+ansible-automation-platform-setup-bundle-*/secrets.yaml
+ansible-automation-platform-setup-bundle-*/secrets.yml
+
+# don't track the environment variables file (e.g. red hat subscription creds)
+.env
+
+# don't track temporary ansible files
+.ansible
