@@ -69,6 +69,6 @@ grep -oE '\b[A-Za-z0-9\-\.]*\.local\b' /vagrant/inventory \
 
 # Run the installer (as root).
 printf "Running setup.sh.  This will take a few minutes.  To check progress, in another terminal:\n"
-printf "  vagrant ssh mgmt"
+printf "  vagrant ssh mgmt\n"
 printf "  sudo tail -F %s/%s\n" "$(realpath .)" "setup.out"
 sudo ./setup.sh -e '@/vagrant/secrets.yaml' > setup.out
