@@ -1,0 +1,24 @@
+---
+ansible-navigator:
+  ansible:
+    inventory:
+      entries:
+      - mgmt.local,
+  color:
+    osc4: false
+  execution-environment:
+    container-engine: podman
+    image: packer-ee
+    pull:
+      arguments:
+      - --tls-verify=false
+      policy: missing
+  editor:
+    command: code-server {filename}
+    console: false
+  logging:
+    file: artifacts/ansible-navigator.log
+    level: critical
+  mode: stdout
+  playbook-artifact:
+    save-as: artifacts/{playbook_name}-artifact-{time_stamp}.json

@@ -1,0 +1,27 @@
+version: 3
+
+images:
+  base_image:
+    name: hub.local/ee-minimal-rhel8:latest
+
+dependencies:
+  galaxy:
+    collections:
+      - ansible.netcommon
+  system:
+    - unzip
+
+options:
+  package_manager_path: /usr/bin/microdnf
+
+additional_build_steps:
+  append_final:
+    - RUN mkdir -p /tmp/packer && cd $_
+          && curl -sSLO https://releases.hashicorp.com/packer/1.9.2/packer_1.9.2_linux_amd64.zip
+          && curl -sSLO https://releases.hashicorp.com/packer/1.9.2/packer_1.9.2_SHA256SUMS
+          && grep packer_*.zip packer_*_SHA256SUMS | sha256sum -c
+          && unzip packer_*.zip
+          && install -m 0755 ./packer /usr/bin/packer
+          && /usr/bin/packer plugins install github.com/hashicorp/vsphere v1.2.1
+
+

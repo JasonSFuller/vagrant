@@ -1,0 +1,17 @@
+- name: Test
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Hello, world!
+      ansible.builtin.debug:
+        msg: Hi
+
+    - name: Get Packer version
+      ansible.builtin.command: /usr/bin/packer version
+      register: out
+      delegate_to: localhost
+
+    - name: Print Packer version
+      ansible.builtin.debug:
+        var: out.stdout
