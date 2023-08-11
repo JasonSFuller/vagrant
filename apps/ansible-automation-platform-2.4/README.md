@@ -8,6 +8,7 @@
 
 * A working [VirtualBox] and [Vagrant] installation, preferably on a Linux host
 * A [Red Hat developer account] for registering the RHEL guests
+* A [subscription allocation] (manifest) for AAP licensing
 * A [registry service account] for downloading the required containers
 * Enough resources on the host to run 3 fairly large guests:
   | Hostname   | Description           | Required resources           |
@@ -19,6 +20,7 @@
 [VirtualBox]: https://www.virtualbox.org/
 [Vagrant]: https://www.vagrantup.com/
 [Red Hat developer account]: https://developers.redhat.com/
+[subscription allocation]: https://access.redhat.com/management/subscription_allocations
 [registry service account]: https://access.redhat.com/terms-based-registry/
 
 
@@ -64,6 +66,22 @@ Bring up the Vagrant machines:
 ```bash
 vagrant up
 ```
+
+This will take ~20 minutes.  Once complete, login to the web UI:
+
+* <https://localhost:8443>, or
+* <https://lab3.example.com:8443>, etc.
+
+And finally, for licensing/registration, use a manifest from your [subscription allocation]
+to add 3 or 4 entitlements from your developer subscription, so AAP can manage a
+few hosts.
+
+> :blue_book: **TIP** -- If you've never created a manifest, it's similar to
+> [the process for Satellite](https://www.redhat.com/en/blog/how-create-and-use-red-hat-satellite-manifest),
+> except you're using a few entitlements from your developer subscription
+> instead of "smart management" (or whatever they're calling it now-a-days).
+
+
 
 ## Troubleshooting
 
