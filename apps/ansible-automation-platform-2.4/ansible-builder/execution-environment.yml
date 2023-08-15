@@ -19,9 +19,20 @@ additional_build_steps:
     - RUN mkdir -p /tmp/packer && cd $_
           && curl -sSLO https://releases.hashicorp.com/packer/1.9.2/packer_1.9.2_linux_amd64.zip
           && curl -sSLO https://releases.hashicorp.com/packer/1.9.2/packer_1.9.2_SHA256SUMS
-          && grep packer_*.zip packer_*_SHA256SUMS | sha256sum -c
-          && unzip packer_*.zip
+          && grep  packer_*_linux_amd64.zip packer_*_SHA256SUMS | sha256sum -c
+          && unzip packer_*_linux_amd64.zip
           && install -m 0755 ./packer /usr/bin/packer
           && /usr/bin/packer plugins install github.com/hashicorp/vsphere v1.2.1
-
+          && cd / && rm -rf /tmp/packer
+          && /usr/bin/packer version
+          && PACKER_PLUGIN_PATH=/home/runner/.config/packer/plugins /usr/bin/packer plugins installed
+#    - RUN mkdir -p /tmp/packer_plugins && cd $_
+#          && curl -sSLO https://github.com/hashicorp/packer-plugin-vsphere/releases/download/v1.2.1/packer-plugin-vsphere_v1.2.1_x5.0_linux_amd64.zip
+#          && curl -sSLO https://github.com/hashicorp/packer-plugin-vsphere/releases/download/v1.2.1/packer-plugin-vsphere_v1.2.1_SHA256SUMS
+#          && grep  packer-plugin-vsphere_v1.2.1_x5.0_linux_amd64.zip packer-plugin-vsphere_v1.2.1_SHA256SUMS | sha256sum -c
+#          && unzip packer-plugin-vsphere_v1.2.1_x5.0_linux_amd64.zip
+#          && install -m 0755 -o root -g root -d /home/runner/.config/packer/plugins/github.com/hashicorp/vsphere
+#          && install -m 0755 -o root -g root ./packer-plugin-vsphere_v1.2.1_x5.0_linux_amd64 /home/runner/.config/packer/plugins/github.com/hashicorp/vsphere/packer-plugin-vsphere_v1.2.1_x5.0_linux_amd64
+#          && install -m 0755 -o root -g root ./packer-plugin-vsphere_v1.2.1_SHA256SUMS       /home/runner/.config/packer/plugins/github.com/hashicorp/vsphere/packer-plugin-vsphere_v1.2.1_x5.0_linux_amd64_SHA256SUMS
+#          && cd / && rm -rf /tmp/packer_plugins
 
