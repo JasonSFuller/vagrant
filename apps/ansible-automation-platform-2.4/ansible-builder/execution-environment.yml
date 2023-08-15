@@ -8,7 +8,6 @@ dependencies:
   system:
     - unzip
     - python3-pip
-    - python3-pip-wheel
     - python3-setuptools
   python:
     - pyvmomi
@@ -34,6 +33,7 @@ additional_build_steps:
           && cd / && rm -rf /tmp/packer
           && /usr/bin/packer version
           && PACKER_PLUGIN_PATH=/home/runner/.config/packer/plugins /usr/bin/packer plugins installed
+##### manual install attempt (fails to see plugin w/ `packer plugins installed`) #####
 #    - RUN mkdir -p /tmp/packer_plugins && cd $_
 #          && curl -sSLO https://github.com/hashicorp/packer-plugin-vsphere/releases/download/v1.2.1/packer-plugin-vsphere_v1.2.1_x5.0_linux_amd64.zip
 #          && curl -sSLO https://github.com/hashicorp/packer-plugin-vsphere/releases/download/v1.2.1/packer-plugin-vsphere_v1.2.1_SHA256SUMS
