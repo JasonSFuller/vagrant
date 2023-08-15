@@ -5,11 +5,19 @@ images:
     name: hub.local/ee-minimal-rhel8:latest
 
 dependencies:
+  system:
+    - unzip
+    - python3-pip
+    - python3-pip-wheel
+    - python3-setuptools
+  python:
+    - pyvmomi
+    - git+https://github.com/vmware/vsphere-automation-sdk-python.git
   galaxy:
     collections:
       - ansible.netcommon
-  system:
-    - unzip
+      - community.vmware
+      - vmware.vmware_rest
 
 options:
   package_manager_path: /usr/bin/microdnf
