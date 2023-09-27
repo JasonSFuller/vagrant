@@ -8,8 +8,7 @@ Other date/time variables:
 {% if 'date_time' in ansible_facts %}
 key                   value
 --------------------  ----------------------------
-{% for key, value in ansible_facts.date_time.items() %}
+{% for key, value in ansible_facts.date_time | dictsort %}
 {{ "{:>20}".format(key) }}  {{ value }}
 {% endfor %}
 {% endif %}
-

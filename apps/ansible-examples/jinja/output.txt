@@ -1,28 +1,29 @@
 
 --------------------------------------------------------------------------------
-According to ansible, today is Thursday!
+According to server.example.com, today is Wednesday!
 --------------------------------------------------------------------------------
 
 Other date/time variables:
 
 key                   value
 --------------------  ----------------------------
-                year  2022
-               month  02
-             weekday  Thursday
-      weekday_number  4
-          weeknumber  05
-                 day  03
-                hour  21
-              minute  01
-              second  56
-               epoch  1643922116
-                date  2022-02-03
-                time  21:01:56
-       iso8601_micro  2022-02-03T21:01:56.021499Z
-             iso8601  2022-02-03T21:01:56Z
-       iso8601_basic  20220203T210156021499
- iso8601_basic_short  20220203T210156
-                  tz  UTC
-           tz_offset  +0000
-
+                date  2023-09-27
+                 day  27
+               epoch  1695849525
+           epoch_int  1695849525
+                hour  17
+             iso8601  2023-09-27T21:18:45Z
+       iso8601_basic  20230927T171845954831
+ iso8601_basic_short  20230927T171845
+       iso8601_micro  2023-09-27T21:18:45.954831Z
+              minute  18
+               month  09
+              second  45
+                time  17:18:45
+                  tz  EDT
+              tz_dst  EDT
+           tz_offset  -0400
+             weekday  Wednesday
+      weekday_number  3
+          weeknumber  39
+                year  2023

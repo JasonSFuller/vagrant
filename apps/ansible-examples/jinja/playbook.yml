@@ -1,24 +1,24 @@
 ---
-- hosts: localhost
+- name: Jinja example
+  hosts: localhost
   gather_facts: false
 
   tasks:
-    - name: cleaning up previous output.txt
-      file:
+    - name: Cleaning up previous output.txt
+      ansible.builtin.file:
         path: output.txt
         state: absent
 
-    - name: gather some basic details about localhost
-      setup:
+    - name: Gather some basic details about localhost
+      ansible.builtin.setup:
         gather_subset:
           - 'min'
 
-    - name: show the ansible date and time fact object
-      debug:
-        var: ansible_facts
+    - name: Show the ansible date and time fact object
+      ansible.builtin.debug:
+        var: ansible_facts.date_time
 
-    - name: write the output file using a template
-      template:
+    - name: Write the output file using a template
+      ansible.builtin.template:
         src: template.j2
         dest: output.txt
-        
