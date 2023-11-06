@@ -13,9 +13,9 @@ ansible-navigator:
       arguments:
       - --tls-verify=false
       policy: missing
-  editor:
-    command: code-server {filename}
-    console: false
+  # editor:
+  #   command: code-server {filename}
+  #   console: false
   logging:
     file: artifacts/ansible-navigator.log
     level: critical
