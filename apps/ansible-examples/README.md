@@ -1,4 +1,7 @@
-# Ansible examples
+# Ansible examples (DEPRECATED)
+
+> :warning: **WARNING** -- This section is very old and only kept around for
+> historical reasons.  I wouldn't recommend using this.
 
 Need to quickly setup a development environment to test Ansible playbooks and
 make calls to Ansible Tower?
@@ -16,7 +19,7 @@ world" Ansible playbook, and scripts to make REST API calls to Tower.
 > :orange_book: **IMPORTANT** -- To get started, install
 > [VirtualBox](https://www.virtualbox.org/manual/UserManual.html#installation)
 > and
-> [Vagrant](https://www.vagrantup.com/docs/installation) first.  
+> [Vagrant](https://www.vagrantup.com/docs/installation) first.
 
 Then, open your favorite terminal, `cd` to the same directory as the
 `Vagrantfile`, and create/provision the guest machines:
@@ -90,7 +93,7 @@ Login to the "ansible" guest VM and run the shell scripts:
 vagrant ssh ansible
 
 # The Ansible Tower credentials should have been added to an
-# environment file.  Examine it to see if any of the values 
+# environment file.  Examine it to see if any of the values
 # need to be adjusted.
 cat /vagrant/.tower.env
 
@@ -101,7 +104,7 @@ cat /vagrant/.tower.env
 # display the job's Ansible output when done.
 /vagrant/curl/run-job-template.sh
 
-# To see more detail when running these scripts, use Bash's 
+# To see more detail when running these scripts, use Bash's
 # "xtrace" mode.  It shows every command executed by the shell,
 # with the shell variable values inserted:
 bash -x /vagrant/curl/run-job-template.sh |& grep curl
