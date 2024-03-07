@@ -35,9 +35,9 @@ Your directory should look like this:
 
 ```text
 $ ls -lad ansible-automation-platform-setup-bundle-* Vagrantfile
--rwxrwxr-x 1 jfuller jfuller 2054136318 Aug 10 13:59 ansible-automation-platform-setup-bundle-2.4-1.2-x86_64.tar.gz
--rw-rw-r-- 1 jfuller jfuller        129 Aug 10 14:01 ansible-automation-platform-setup-bundle-2.4-1.2-x86_64.tar.gz.sha256
--rw-rw-r-- 1 jfuller jfuller       2575 Aug 10 13:45 Vagrantfile
+-rwxrwxr-x 1 jfuller jfuller 2312507405 Mar  7 08:20 ansible-automation-platform-setup-bundle-2.4-6-x86_64.tar.gz
+-rwxrwxr-x 1 jfuller jfuller        127 Mar  7 08:20 ansible-automation-platform-setup-bundle-2.4-6-x86_64.tar.gz.sha256
+-rw-rw-r-- 1 jfuller jfuller       2575 Feb 28 17:23 Vagrantfile
 ```
 
 Create a `.env` file.  

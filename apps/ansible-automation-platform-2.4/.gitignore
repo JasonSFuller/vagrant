@@ -1,5 +1,6 @@
 # don't track the installer binaries and expanded dir
 ansible-automation-platform-setup-*.tar.gz
+ansible-automation-platform-setup-*.tar
 ansible-automation-platform-setup-*/
 
 # don't track aap installation secrets
