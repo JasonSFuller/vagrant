@@ -2,8 +2,6 @@
 
 function error { echo "ERROR: $*" >&2; exit 1; }
 
-
-
 ################################################################################
 #  Pre-flight checks
 ################################################################################
@@ -67,4 +65,4 @@ grep -oE '\b[A-Za-z0-9\-\.]*\.local\b' /vagrant/inventory \
 printf "Running setup.sh.  This will take a few minutes.  To check progress, in another terminal:\n"
 printf "  vagrant ssh tower\n"
 printf "  sudo tail -F %s/%s\n" "$(realpath .)" "setup.out\n"
-sudo ./setup.sh > setup.out
+sudo ./setup.sh | tee setup.out

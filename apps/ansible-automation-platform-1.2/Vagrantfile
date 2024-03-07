@@ -48,7 +48,7 @@ Vagrant.configure("2") do |config|
       vb.cpus   = "2"
     end
     guest.vm.provision "shell", privileged: false, path: "bootstrap-ansible-vagrant.sh"
-    guest.vm.provision "shell", privileged: false, path: "install.sh"
+    guest.vm.provision "shell", privileged: false, path: "install-aap-12.sh"
   end
 
 end

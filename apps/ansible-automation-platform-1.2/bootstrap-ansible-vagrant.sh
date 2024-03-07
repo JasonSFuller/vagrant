@@ -90,7 +90,7 @@ sudo install -o ansible -g ansible -m 0644 /vagrant/.ansible/id_rsa.pub ~ansible
 ################################################################################
 
 # Install the Avahi daemon to allow mDNS queries.
-sudo dnf install --assumeyes --quiet nss-mdns avahi
+sudo yum install --assumeyes --quiet nss-mdns avahi
 
 # Allow the mDNS service through the firewall.
 sudo firewall-offline-cmd --add-service=mdns
