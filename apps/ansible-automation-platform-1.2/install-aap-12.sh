@@ -66,3 +66,24 @@ printf "Running setup.sh.  This will take a few minutes.  To check progress, in 
 printf "  vagrant ssh tower\n"
 printf "  sudo tail -F %s/%s\n" "$(realpath .)" "setup.out\n"
 sudo ./setup.sh | tee setup.out
+
+# The default Ansible venv in Tower is quite old, so lets create a few new ones.
+# However, there are limits to this because RHEL 7 is EOL and only supports
+# specific versions of Python, but we'll do our best with what we have.
+printf "Installing a new venv (ansible-4)...\n"
+sudo /vagrant/install-venv-ansible-4.sh
+printf "Installing a new venv (ansible-6)...\n"
+sudo /vagrant/install-venv-ansible-6.sh
+
+# Give the services a bit to settle, backup/fix the original self-signed cert,
+# otherwise Chrome based browsers will get an "ERR_SSL_KEY_USAGE_INCOMPATIBLE"
+# error.
+printf "Sleeping for 60 seconds for the services to settle...\n"
+sleep 60
+printf "Creating a new certificate...\n"
+sudo cp -a /etc/tower/tower.cert{,.orig}
+sudo openssl req -x509 -days 365 -subj /CN=localhost \
+  -key /etc/tower/tower.key \
+  -out /etc/tower/tower.cert
+printf "Restarting the AAP service...\n"
+sudo systemctl restart ansible-tower.service
