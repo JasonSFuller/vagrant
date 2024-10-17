@@ -2,10 +2,16 @@
 # vi: set ft=ruby :
 
 # Accessing the RHEL package repositories requires registration (via
-# subscription-manager).  Otherwise, DNF commands will fail due to
-# authentication.  The vagrant-registration plugin helps with automating this
-# process.  However, if you have to perform this manually on the guest VM for
-# some reason, this is the equivalent:
+# `subscription-manager`).  Otherwise, DNF commands will fail due to
+# authentication.  The `vagrant-registration` plugin helps with automating this
+# process.  Copy `.env.sample.txt` to `.env` and update it with your
+# credentials:
+#
+#     cp .env.sample.txt .env
+#     vim .env
+#
+# However, if you have to perform this manually on the guest VM for some reason,
+# this is the equivalent:
 #
 #     subscription-manager register --auto-attach --force
 #
@@ -13,12 +19,12 @@
 # required.  For lab and development purposes, you can register for a no-cost
 # account at:  https://developers.redhat.com/
 
-# Use the latest vagrant, at least as of 2022-07-22.
-Vagrant.require_version ">= 2.2.19"
+# Use the latest vagrant, at least as of 2024-10-17.
+Vagrant.require_version ">= 2.4.1"
 
 Vagrant.configure("2") do |config|
   #-- plugin config ------------------------------------------------------------
-  config.vagrant.plugins = ["vagrant-registration", "vagrant-env", "vagrant-sshfs"]
+  config.vagrant.plugins = ["vagrant-libvirt", "vagrant-registration", "vagrant-env", "vagrant-sshfs"]
   config.env.enable
   config.registration.username = ENV['RED_HAT_SUBSCRIPTION_MGR_USER']
   config.registration.password = ENV['RED_HAT_SUBSCRIPTION_MGR_PASS']
@@ -28,17 +34,13 @@ Vagrant.configure("2") do |config|
   config.vm.define "rhel9" do |guest|
     guest.vm.box = "generic/rhel9"
     # guest.vm.network "forwarded_port", guest: 9090, host: 9090 # cockpit
-    guest.vm.provider "virtualbox" do |vb|
-      vb.memory = "4096"
-      vb.cpus   = "2"
-      # If you don't set this, you get screen flicker and "Invalid settings detected" in the GUI.
-      vb.customize ['modifyvm', :id, '--graphicscontroller', 'vmsvga']
+    guest.vm.provider :libvirt do |lv|
+      lv.memory = "4096"
+      lv.cpus   = "2"
     end
     guest.vm.provision "shell", privileged: false, inline: <<-SHELL
       # sudo dnf -y install cockpit
       # sudo systemctl enable --now cockpit.socket
-      # sudo firewall-cmd --add-service=cockpit --permanent
-      # sudo firewall-cmd --reload
       echo 'Hello, world!'
     SHELL
   end
